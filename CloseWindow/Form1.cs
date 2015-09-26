@@ -15,6 +15,13 @@ namespace CloseWindow
 {
     public partial class Form1 : Form
     {
+
+        const int multiplier = 60;
+        private int seconds;
+        private short[] param = new short[2] {-1,-1};
+        private bool countDown = false;
+        private Button activeButton;
+
         public Form1()
         {
             InitializeComponent();
@@ -23,60 +30,160 @@ namespace CloseWindow
         [DllImport("user32.dll")]
         public static extern int ExitWindowsEx(int operationFlag, int operationReason);
 
-        private void logout_Click(object sender, EventArgs e)
+        private void btnLogout_Click(object sender, EventArgs e)
         {
+            this.activeButton = this.btnLogout;
 
-            MessageBox.Show(this.numericUpDown.Value.GetType().ToString());
-            //ExitWindowsEx(0, 0);
+            if (this.countDown == false)
+            {                
+                this.decorateButtons(new int[] { 1, 0, 0, 0 }, "Cancel Log out");
+                this.initializeParams(0, 0);
+                this.initTimer();                                
+            }
+            else
+            {             
+                this.decorateButtons(new int[] { 1, 1, 1, 1 }, "Log out");                           
+                this.stopTimer();                                
+            }
+        }       
+
+        private void btnForceLogOut_Click(object sender, EventArgs e)
+        {
+            this.activeButton = this.btnForceLogOut;
+
+            if (this.countDown == false)
+            {
+                this.decorateButtons(new int[] { 0, 1, 0, 0 }, "Cancel Force Log out");
+                this.initializeParams(4, 0);
+                this.initTimer();                
+            }
+            else
+            {
+                this.decorateButtons(new int[] { 1, 1, 1, 1 }, "Force Log out");
+                this.stopTimer();                
+            }
         }
 
-        private void forceLogOut_Click(object sender, EventArgs e)
+        private void btnShutDown_Click(object sender, EventArgs e)
         {
-            //ExitWindowsEx(4, 0);
+            this.activeButton = this.btnShutDown;
+
+            if (this.countDown == false)
+            {
+                this.decorateButtons(new int[] { 0, 0, 1, 0 }, "Cancel ShutDown");
+                this.initializeParams(1, 0);
+                this.initTimer();
+            }
+            else
+            {
+                this.decorateButtons(new int[] { 1, 1, 1, 1 }, "ShutDown");
+                this.stopTimer();
+            }
         }
 
-        private void shutDown_Click(object sender, EventArgs e)
+        private void btnRestart_Click(object sender, EventArgs e)
         {
-            //ExitWindowsEx(1, 0);
+            this.activeButton = this.btnRestart;
+
+            if (this.countDown == false)
+            {
+                this.decorateButtons(new int[] { 0, 0, 0, 1 }, "Cancel Restart");
+                this.initializeParams(2, 0);
+                this.initTimer();
+            }
+            else
+            {
+                this.decorateButtons(new int[] { 1, 1, 1, 1 }, "Restart");
+                this.stopTimer();
+            }
         }
 
-        private void restart_Click(object sender, EventArgs e)
-        {
-            //ExitWindowsEx(2, 0);
-        }
-
-        private void hideApp_Click(object sender, EventArgs e)
+        private void btnHideApp_Click(object sender, EventArgs e)
         {
             Hide();
         }
-
+        
         private void notifyIcon_MouseClick(object sender, MouseEventArgs e)
         {
             Show();
         }
 
+        private void initTimer() {
+            int minutes = Convert.ToInt32(this.numericUpDown.Value);            
+            this.seconds = minutes * Form1.multiplier;
+            this.countDown = true;
+            this.numericUpDown.Enabled = false;
+            this.timer1.Start();            
+        }
+        
+        private void stopTimer()
+        {                        
+            this.labelTimer.Text = "0:00";
+            this.countDown = false;
+            this.numericUpDown.Enabled = true;
+            this.timer1.Stop();
+        }
+
+        private void initializeParams(short one, short two) {
+            this.param[0] = one;
+            this.param[1] = two;
+        }
+
+
+        /// <summary>
+        /// CO 1 sekundę
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void timer1_Tick(object sender, EventArgs e)
         {
-            //this.liczba++;
-            //DateTime curDate = DateTime.Now;
-            //string czas = curDate.TimeOfDay.ToString();
-            //this.labelClock.Text = czas.Remove(8, 8);
 
-            //if (this.countDownBool == true)
-            //{
-            //    this.countDownVal--;
-            //    this.labelCountDown.Text = countDownVal.ToString();
+            if (this.countDown == true) {
+                this.seconds--;
+                this.formatTime();
+            }
 
-            //    if (this.countDownVal == 0)
-            //    {
-            //        Show();
-            //        this.countDownBool = false;
-            //        this.countDownSetter.Enabled = true;
-            //        this.btnCountDown.Text = "Start";
-            //        this.countDownVal = this.multiply * this.countDownSetter.Value;
-            //        this.a.controls.play();
-            //    }
-            //}
-        }                              
+            if (this.seconds == 0 && this.countDown == true) {
+                this.countDown = false;                
+                //MessageBox.Show(String.Format("Action with params {0} {1}", this.param[0], this.param[1]));
+                ExitWindowsEx(this.param[0], this.param[1]);
+            }
+        }
+
+        private void formatTime() {
+            
+            int minutes = this.seconds / 60;
+            int rest = this.seconds % 60;
+
+            if (rest < 10)
+                this.labelTimer.Text = String.Format("{0}:0{1}", minutes, rest);            
+            else
+                this.labelTimer.Text = String.Format("{0}:{1}", minutes, rest);            
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="btns"></param>
+        private void decorateButtons(int[] btns, string text) { 
+
+            if (btns[0] == 1) this.btnLogout.Enabled = true;
+            if (btns[1] == 1) this.btnForceLogOut.Enabled = true;            
+            if (btns[2] == 1) this.btnShutDown.Enabled = true;
+            if (btns[3] == 1) this.btnRestart.Enabled = true;
+            if (btns[0] == 0) this.btnLogout.Enabled = false;
+            if (btns[1] == 0) this.btnForceLogOut.Enabled = false;
+            if (btns[2] == 0) this.btnShutDown.Enabled = false;
+            if (btns[3] == 0) this.btnRestart.Enabled = false;
+            this.activeButton.Text = text;
+        }
+
+        private void debug() {
+
+            //this.label1.Text = this.countDown.ToString();
+            //this.label2.Text = this.param[0].ToString() + " " + this.param[0].ToString();
+            //this.label3.Text = this.seconds.ToString();
+        }
+                
     }
 }
