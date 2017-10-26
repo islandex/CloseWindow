@@ -9,18 +9,20 @@ namespace CloseWindow.Library
 {
     class MyTimer
     {
-
         private Timer timer;
 
-        public MyTimer(Timer timer){
+        public MyTimer(Timer timer)
+        {
             this.timer = timer;
         }
 
-        public void startTimer() {
+        public void startTimer()
+        {
             this.timer.Start();
         }
 
-        public void stopTimer(){
+        public void stopTimer()
+        {
             this.timer.Stop();
         }        
     }

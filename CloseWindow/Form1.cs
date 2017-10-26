@@ -94,15 +94,18 @@ namespace CloseWindow
             }
         }
 
-        private void btnHideApp_Click(object sender, EventArgs e){
+        private void btnHideApp_Click(object sender, EventArgs e)
+        {
             Hide();
         }
         
-        private void notifyIcon_MouseClick(object sender, MouseEventArgs e){
+        private void notifyIcon_MouseClick(object sender, MouseEventArgs e)
+        {
             Show();
         }
 
-        private void initTimer() {
+        private void initTimer()
+        {
             int minutes = Convert.ToInt32(this.numericUpDown.Value);            
             this.seconds = minutes * Form1.multiplier;
             this.countDown = true;
@@ -118,7 +121,8 @@ namespace CloseWindow
             this.timer1.Stop();
         }
 
-        private void initializeParams(short one, short two) {
+        private void initializeParams(short one, short two)
+        {
             this.param[0] = one;
             this.param[1] = two;
         }
@@ -132,22 +136,22 @@ namespace CloseWindow
         private void timer1_Tick(object sender, EventArgs e)
         {
 
-            if (this.countDown == true) {
+            if (this.countDown == true)
+            {
                 this.seconds--;
                 this.formatTime();
             }
 
-            if (this.seconds == 0 && this.countDown == true) {
-                this.countDown = false;                
-                //MessageBox.Show(String.Format("Action with params {0} {1}", this.param[0], this.param[1]));
-                if (this.param[0] == 1){
+            if (this.seconds == 0 && this.countDown == true)
+            {
+                this.countDown = false;
+
+                if (this.param[0] == 1)
                     MyWindows.Shutdown();
-                }
-                else if(this.param[0] == 2){
+                else if(this.param[0] == 2)
                     MyWindows.Restart();
-                }else{
-                    MyWindows.ExitWindowsEx(this.param[0], this.param[1]);                   
-                }
+                else
+                    MyWindows.ExitWindowsEx(this.param[0], this.param[1]);
             }
         }
 
@@ -168,22 +172,24 @@ namespace CloseWindow
         /// <param name="btns"></param>
         private void decorateButtons(int[] btns, string text) { 
 
-            if (btns[0] == 1) this.btnLogout.Enabled = true;
-            if (btns[1] == 1) this.btnForceLogOut.Enabled = true;            
-            if (btns[2] == 1) this.btnShutDown.Enabled = true;
-            if (btns[3] == 1) this.btnRestart.Enabled = true;
-            if (btns[0] == 0) this.btnLogout.Enabled = false;
-            if (btns[1] == 0) this.btnForceLogOut.Enabled = false;
-            if (btns[2] == 0) this.btnShutDown.Enabled = false;
-            if (btns[3] == 0) this.btnRestart.Enabled = false;
+            if (btns[0] == 1)
+                this.btnLogout.Enabled = true;
+            if (btns[1] == 1)
+                this.btnForceLogOut.Enabled = true;
+            if (btns[2] == 1)
+                this.btnShutDown.Enabled = true;
+            if (btns[3] == 1)
+                this.btnRestart.Enabled = true;
+            if (btns[0] == 0)
+                this.btnLogout.Enabled = false;
+            if (btns[1] == 0)
+                this.btnForceLogOut.Enabled = false;
+            if (btns[2] == 0)
+                this.btnShutDown.Enabled = false;
+            if (btns[3] == 0)
+                this.btnRestart.Enabled = false;
+
             this.activeButton.Text = text;
         }
-
-        private void debug() {
-
-            //this.label1.Text = this.countDown.ToString();
-            //this.label2.Text = this.param[0].ToString() + " " + this.param[0].ToString();
-            //this.label3.Text = this.seconds.ToString();
-        }                                
     }
 }
