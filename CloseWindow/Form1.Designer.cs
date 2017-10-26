@@ -47,6 +47,11 @@
             // numericUpDown
             // 
             this.numericUpDown.Location = new System.Drawing.Point(84, 60);
+            this.numericUpDown.Maximum = new decimal(new int[] {
+            720,
+            0,
+            0,
+            0});
             this.numericUpDown.Minimum = new decimal(new int[] {
             1,
             0,
@@ -133,7 +138,7 @@
             this.btnHideApp.Name = "btnHideApp";
             this.btnHideApp.Size = new System.Drawing.Size(174, 34);
             this.btnHideApp.TabIndex = 7;
-            this.btnHideApp.Text = "Hide Window";
+            this.btnHideApp.Text = "Hide App";
             this.btnHideApp.UseVisualStyleBackColor = true;
             this.btnHideApp.Click += new System.EventHandler(this.btnHideApp_Click);
             // 
@@ -153,7 +158,7 @@
             // 
             this.labelTimer.AutoSize = true;
             this.labelTimer.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelTimer.Location = new System.Drawing.Point(99, 101);
+            this.labelTimer.Location = new System.Drawing.Point(90, 101);
             this.labelTimer.Name = "labelTimer";
             this.labelTimer.Size = new System.Drawing.Size(67, 31);
             this.labelTimer.TabIndex = 8;
@@ -175,7 +180,7 @@
             this.Controls.Add(this.numericUpDown);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Form1";
-            this.Text = "Close Windows";
+            this.Text = "Close Windows, by Island 2015";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

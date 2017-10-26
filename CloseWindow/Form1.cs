@@ -7,8 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
-
+using CloseWindow.Library;
 
 
 namespace CloseWindow
@@ -25,10 +24,7 @@ namespace CloseWindow
         public Form1()
         {
             InitializeComponent();
-        }
-
-        [DllImport("user32.dll")]
-        public static extern int ExitWindowsEx(int operationFlag, int operationReason);
+        }       
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
@@ -98,13 +94,11 @@ namespace CloseWindow
             }
         }
 
-        private void btnHideApp_Click(object sender, EventArgs e)
-        {
+        private void btnHideApp_Click(object sender, EventArgs e){
             Hide();
         }
         
-        private void notifyIcon_MouseClick(object sender, MouseEventArgs e)
-        {
+        private void notifyIcon_MouseClick(object sender, MouseEventArgs e){
             Show();
         }
 
@@ -146,7 +140,14 @@ namespace CloseWindow
             if (this.seconds == 0 && this.countDown == true) {
                 this.countDown = false;                
                 //MessageBox.Show(String.Format("Action with params {0} {1}", this.param[0], this.param[1]));
-                ExitWindowsEx(this.param[0], this.param[1]);
+                if (this.param[0] == 1){
+                    MyWindows.Shutdown();
+                }
+                else if(this.param[0] == 2){
+                    MyWindows.Restart();
+                }else{
+                    MyWindows.ExitWindowsEx(this.param[0], this.param[1]);                   
+                }
             }
         }
 
@@ -183,7 +184,6 @@ namespace CloseWindow
             //this.label1.Text = this.countDown.ToString();
             //this.label2.Text = this.param[0].ToString() + " " + this.param[0].ToString();
             //this.label3.Text = this.seconds.ToString();
-        }
-                
+        }                                
     }
 }
